@@ -1,7 +1,7 @@
 import React from 'react';
-import { useQuiz } from '../hooks/useQuiz';
-import type { QuizResult, Student } from '../types/types';
-import ResultCard from '../components/ResultCard';
+import { useQuiz } from '../../hooks/useQuiz';
+import type { QuizResult, Student } from './types';
+import ResultCard from '../../components/Card/ResultCard';
 
 interface QuizResultPageProps {
   quizId: string;
@@ -12,7 +12,7 @@ interface QuizResultPageProps {
 const QuizResultPage: React.FC<QuizResultPageProps> = ({ quizId, result, student }) => {
   const { quiz } = useQuiz(quizId);
 
-    const submittedDate = new Date(result.timeSubmitted);
+  const submittedDate = new Date(result.timeSubmitted);
   const formattedTime = submittedDate.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
   const formattedDate = submittedDate.toLocaleDateString('vi-VN');
 
@@ -72,7 +72,7 @@ const QuizResultPage: React.FC<QuizResultPageProps> = ({ quizId, result, student
       </div>
 
       <div className="w-full max-w-full px-6 py-8">
-        {quiz.questions.map((question, index) => (
+        {quiz.questions.map((question: typeof quiz.questions[0], index: number) => (
           <ResultCard
             key={question.id}
             question={question}

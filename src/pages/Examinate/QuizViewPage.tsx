@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { useQuiz } from '../hooks/useQuiz';
-import QuestionCard from '../components/QuestionCard';
-import AdminResultsPage from './ResultsPage';
-import { useParams } from 'react-router-dom';
+import { useQuiz } from '../../hooks/useQuiz';
+import QuestionCard from '../../components/Card/QuestionCard';
+import ResultsPage from '../Examinate/ResultsPage';
 
 interface QuizViewPageProps {
   quizId: string;
@@ -76,7 +75,7 @@ const QuizViewPage: React.FC<QuizViewPageProps> = () => {
         <div className="mt-4">
           {activeTab === 'questions' && (
             <>
-              {quiz.questions.map((question, index) => (
+              {quiz.questions.map((question: typeof quiz.questions[0], index: number) => (
                 <QuestionCard
                   key={question.id}
                   question={question}
@@ -89,7 +88,7 @@ const QuizViewPage: React.FC<QuizViewPageProps> = () => {
 
           {activeTab === 'answers' && (
             <>
-              <AdminResultsPage quizId={quizId} />
+              <ResultsPage quizId={quizId} />
             </>
           )}
         </div>
