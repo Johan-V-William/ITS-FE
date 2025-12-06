@@ -1,35 +1,99 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './hooks/useAuth';
 
-function App() {
-  const [count, setCount] = useState(0)
+// Import các trang của bạn
+import { SignIn } from './pages/SignIn';
+import { SignUp } from './pages/SignUp';
+import Dashboard from './pages/Dashboard';
+import CreateQuiz from './pages/CreateQuiz'; // <-- Import trang của bạn
+import ExaminatePage from './pages/Examinate';
+
+import { BackgroundPattern } from './components/BackgroundPattern';
+import './App.css';
+import QuizResultPage from './pages/Examinate/QuizResultPage';
+import { CourseManagement } from './pages/Course/CourseManagement';
+
+// Component này dùng để bảo vệ các route, chỉ cho phép user đã đăng nhập truy cập
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user } = useAuth();
+  if (!user) {
+    // Nếu chưa đăng nhập, điều hướng về trang đăng nhập
+    return <Navigate to="/" />;
+  }
+  return children;
+};
+
+// Component này quản lý việc hiển thị trang SignIn/SignUp
+const AuthPage = () => {
+  const { user } = useAuth();
+  const [currentView, setCurrentView] = useState<'signin' | 'signup'>('signin');
+
+  // Nếu đã đăng nhập, tự động điều hướng đến Dashboard
+  if (user) {
+    return <Navigate to="/dashboard" />;
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+      <BackgroundPattern />
+      {currentView === 'signin' ? (
+        <SignIn onSwitchToSignUp={() => setCurrentView('signup')} />
+      ) : (
+        <SignUp onSwitchToSignIn={() => setCurrentView('signin')} />
+      )}
+    </div>
+  );
+};
+
+function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <Routes>
+          {/* Route cho trang đăng nhập/đăng ký */}
+          <Route path="/" element={<AuthPage />} />
+
+          {/* Các route được bảo vệ */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/create-quiz"
+            element={
+              <ProtectedRoute>
+                <CreateQuiz />
+              </ProtectedRoute>
+            }
+          />
+          
+          {/* Bạn có thể thêm các route được bảo vệ khác ở đây */}
+          <Route
+            path="/examinate/:id"
+            element={
+              <ProtectedRoute>
+                <ExaminatePage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/course/:id"
+            element={
+              <ProtectedRoute>
+                <CourseManagement />
+              </ProtectedRoute>
+            }
+          /> 
+        </Routes>
+      </Router>
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;
