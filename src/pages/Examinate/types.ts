@@ -15,6 +15,7 @@ export interface Question {
 export interface Quiz {
   id: string;
   title: string;
+  courseId?: string;
   course: string;
   totalQuestions: number;
   duration: number;

@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Question } from '../types/types';
+import type { Question } from '../../pages/Examinate/types';
 import { CheckCircle } from 'lucide-react';
 
 interface QuestionCardProps {
@@ -17,6 +17,8 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   onAnswerChange,
   viewMode = 'taking'
 }) => {
+
+  console.log('Rendering QuestionCard:', { question});
   if (viewMode === 'preview') {
     // Admin preview mode - show correct answers
     return (
@@ -37,7 +39,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
 
         <div className="space-y-2 mb-4">
           {question.options?.map((option) => {
-            const isCorrect = option.id === question.correctAnswer;
+            const isCorrect = option.text === question.correctAnswer;
             return (
               <div
                 key={option.id}
@@ -47,7 +49,6 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
                     : 'border-gray-200 bg-white'
                 }`}
               >
-                <span className="mr-3 font-medium text-gray-700">{option.id.toUpperCase()}</span>
                 <span className="text-gray-900 text-left flex-1">{option.text}</span>
               </div>
             );

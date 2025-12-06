@@ -12,6 +12,7 @@ import ExaminatePage from './pages/Examinate';
 import { BackgroundPattern } from './components/BackgroundPattern';
 import './App.css';
 import QuizResultPage from './pages/Examinate/QuizResultPage';
+import { CourseManagement } from './pages/Course/CourseManagement';
 
 // Component này dùng để bảo vệ các route, chỉ cho phép user đã đăng nhập truy cập
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -73,10 +74,19 @@ function App() {
           
           {/* Bạn có thể thêm các route được bảo vệ khác ở đây */}
           <Route
-            path="/examinate"
+            path="/examinate/:id"
             element={
               <ProtectedRoute>
                 <ExaminatePage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/course/:id"
+            element={
+              <ProtectedRoute>
+                <CourseManagement />
               </ProtectedRoute>
             }
           /> 
