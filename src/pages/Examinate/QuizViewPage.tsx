@@ -2,20 +2,28 @@ import React, { useState } from 'react';
 import { useQuiz } from '../../hooks/useQuiz';
 import QuestionCard from '../../components/Card/QuestionCard';
 import ResultsPage from '../Examinate/ResultsPage';
+import { Link, useParams } from 'react-router-dom';
 
 interface QuizViewPageProps {
   quizId: string;
 }
 
 const QuizViewPage: React.FC<QuizViewPageProps> = () => {
-  // const { quizId } = useParams();
-  const quizId = "quiz-1";
-
+  const { id } = useParams<{ id: string }>();
+  const quizId = id || "";
   const { quiz, loading } = useQuiz(quizId);
   const [activeTab, setActiveTab] = useState<'questions' | 'answers'>('questions');
 
   if (loading) {
     return <div className="flex items-center justify-center h-screen">Đang tải...</div>;
+  }
+
+  function formatMonthYear(isoString: string) {
+    const date = new Date(isoString);
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `${month}/${year}`;
   }
 
   if (!quiz) return null;
@@ -25,7 +33,25 @@ const QuizViewPage: React.FC<QuizViewPageProps> = () => {
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="w-full max-w-full px-6 py-4">
           <div className="text-sm text-gray-500 mb-3 text-left">
-            Trang chủ › Khóa học › {quiz.course} › Quiz
+            <Link 
+              to="/dashboard" 
+              className="hover:underline hover:text-blue-600"
+            >
+              Trang chủ
+            </Link>
+
+            {" › "}
+
+            <Link 
+              to={`/course/${quiz.courseId}`}         // hoặc quiz.courseId nếu bạn có
+              className="hover:underline hover:text-blue-600"
+            >
+              {quiz.course}
+            </Link>
+
+            {" › "}
+
+            {quiz.title}
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-4 text-left">{quiz.title}</h1>
           
@@ -40,7 +66,7 @@ const QuizViewPage: React.FC<QuizViewPageProps> = () => {
               Thời lượng: {quiz.duration} phút
             </span>
             <span className="px-4 py-2 bg-[#E3F2FD] rounded-lg text-sm font-medium">
-              Cập nhật: {quiz.createdDate}
+              Cập nhật: {formatMonthYear( quiz.createdDate)}
             </span>
           </div>
         </div>

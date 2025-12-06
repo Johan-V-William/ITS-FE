@@ -7,7 +7,7 @@ import type { QuizResult, Student } from './types';
 import {demoStudent, demoQuizResult} from '../../mock-data/data';
 
 
-const ExaminatePage: React.FC = () => {
+const ExaminatePage: React.FC = (course) => {
   const [quizResult] = useState<QuizResult>(demoQuizResult);
 
   const [student] = useState<Student>(demoStudent);
@@ -15,12 +15,8 @@ const ExaminatePage: React.FC = () => {
   return (
     <div className="min-h-screen w-full">
       <Header />
-
-        <QuizViewPage quizId="quiz-1" />
-      
-
+        <QuizViewPage quizId="bbc3bc8e-b264-40c5-a080-5f487a31e2fe" />
         {/* <QuizResultPage quizId="quiz-1" result={quizResult} student={student} /> */}
-
       <Footer />
     </div>
   );
