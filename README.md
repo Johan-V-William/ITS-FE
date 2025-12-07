@@ -71,3 +71,23 @@ export default defineConfig([
   },
 ])
 ```
+# Tech stack  
+- React (với react & react-dom)  
+- TypeScript  
+- Vite (build tool / dev server)  
+- Tailwind CSS  
+- Routing: react-router-dom  
+- Icons: lucide-react  
+- ESLint (linting)  
+
+##  Yêu cầu / Điều kiện tiên quyết  
+- Node.js (phiên bản ổn định — e.g. Node 18+)  
+- npm hoặc yarn  
+
+##  Cài đặt & chạy dự án  
+
+```bash
+git clone https://github.com/your-username/ITS-FE.git   # hoặc URL repo bạn  
+cd ITS-FE/its_interface                              # theo cấu trúc repo  
+npm install                                          # hoặc yarn install  
+npm run dev                                          # chạy ở môi trường phát triển
