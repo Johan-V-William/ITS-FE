@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Play, HelpCircle, CheckCircle, Eye, Search, Filter, BookOpen, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import { StatCard } from '../../components/Card/StatCardCourse';
 import FooterPage from '@/components/FooterPage';
@@ -7,33 +7,9 @@ import CourseHeader from '@/components/CourseHeader';
 import { BackgroundPattern } from '@/components/BackgroundPattern';
 import { courseService } from '@/services/courseService';
 import { TopicCard } from '@/components/Card/TopicCard';
+import type { CourseData } from '../../types/course';
 
 type ContentFilter = 'all' | 'videos' | 'quizzes';
-
-interface Topic {
-  id: string;
-  courseId: string;
-  name: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-  version: string | null;
-  validFrom: string | null;
-  validTo: string | null;
-  questions: any[];
-}
-
-interface CourseData {
-  id: string;
-  name: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-  version: number | null;
-  validFrom: string | null;
-  validTo: string | null;
-  topics: Topic[];
-}
 
 export function CourseManagement() {
   const { id } = useParams<{ id: string }>();
@@ -44,7 +20,7 @@ export function CourseManagement() {
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6; // Changed from 9 to 6 for better layout with list view
-
+  const navigate = useNavigate();
   // Fetch course data
   useEffect(() => {
     const fetchCourseData = async () => {
@@ -110,7 +86,7 @@ export function CourseManagement() {
 
   const handleAddContent = () => {
     // TODO: Implement add content functionality
-    console.log('Add content to course:', id);
+    navigate('/create-quiz');
   };
 
   const handleDeleteTopic = async (topicId: string) => {

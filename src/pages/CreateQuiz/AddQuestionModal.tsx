@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import type { Question, NewQuestion } from './types';
+import type { Question, NewQuestion } from '../../types/quiz';
 import MultipleChoiceForm from './MultipleChoiceForm';
 import TrueFalseForm from './TrueFalseForm';
 import EssayForm from './EssayForm';

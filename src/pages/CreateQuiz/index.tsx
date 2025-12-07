@@ -4,7 +4,7 @@ import Footer from '@/components/FooterPage';
 import { BackgroundPattern } from '@/components/BackgroundPattern';
 import { Plus, Trash2, Edit, ChevronRight, Home } from 'lucide-react';
 import { AddQuestionModal } from './AddQuestionModal';
-import type { Question, NewQuestion } from './types';
+import type { Question, NewQuestion } from '../../types/quiz';
 // Import thêm getQuestionsApi
 import { createQuizApi, deleteQuestionApi, getTopicsApi, getQuestionsApi, type Topic } from '../../services/quizService';
 

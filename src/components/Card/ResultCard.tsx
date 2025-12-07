@@ -33,7 +33,7 @@ const ResultCard: React.FC<ResultCardProps> = ({ question, questionNumber, userA
       <div className="space-y-2 mb-4">
         {question.options?.map((option) => {
           const isUserAnswer = userAnswer === option.id;
-          const isCorrectAnswer = option.id === question.correctAnswer;
+          const isCorrectAnswer = option.text === question.correctAnswer;
           
           let className = 'flex items-center p-3 rounded-lg border-2 ';
           if (isCorrectAnswer) {
@@ -46,7 +46,6 @@ const ResultCard: React.FC<ResultCardProps> = ({ question, questionNumber, userA
 
           return (
             <div key={option.id} className={className}>
-              <span className="mr-2 font-medium text-gray-700">{option.id.toUpperCase()}</span>
               <span className="text-gray-900 text-left flex-1">{option.text}</span>
               {isCorrectAnswer && <Check className="w-5 h-5 text-emerald-600" />}
               {isUserAnswer && !isCorrect && <XCircle className="w-5 h-5 text-red-600" />}

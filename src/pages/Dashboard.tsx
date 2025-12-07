@@ -5,8 +5,9 @@ import Pagination from '@/components/Panigation';
 import { CourseCard } from '@/components/Card/CourseCard';
 import FilterBar from '@/components/Bar/FilterBar';
 import { Plus, Loader2 } from 'lucide-react';
-import { type Course, courseService } from '@/services/courseService';
+import { courseService } from '@/services/courseService';
 import { BackgroundPattern } from '@/components/BackgroundPattern';
+import type { Course } from '@/types/course';
 
 export default function Dashboard() {
   const [currentPage, setCurrentPage] = useState<number>(1);

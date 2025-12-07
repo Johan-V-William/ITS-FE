@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { examService } from '@/services/examinateService';
-import type { Quiz } from '../pages/Examinate/types';
+import type { Quiz } from '../types/examinate';
 
 interface UseQuizReturn {
   quiz: Quiz | null;

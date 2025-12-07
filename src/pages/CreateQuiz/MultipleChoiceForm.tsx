@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import type { Question, NewQuestion } from './types';
+import type { Question, NewQuestion } from '../../types/quiz';
 import { Plus, Trash2, Bold, Italic, Underline, Image as ImageIcon } from 'lucide-react';
 import { createQuestionApi, updateQuestionApi, getTopicsApi, type Topic } from '../../services/quizService';
 
