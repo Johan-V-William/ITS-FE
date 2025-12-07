@@ -6,13 +6,13 @@ export interface Option {
 }
 
 export interface Question {
-  id: number; // ID tạm thời ở frontend để quản lý (sửa, xóa)
+  id: string | number; // SỬA: Cho phép cả string (Backend) và number (Temp)
   content: string;
   questionType: 'MULTIPLE_CHOICE' | 'TRUE_FALSE' | 'ESSAY';
   options?: Option[];
   explanation?: string;
-  // Thêm các trường khác từ backend nếu cần (ví dụ: difficulty)
+  difficulty?: string; // THÊM
+  topicId?: string;    // THÊM
 }
 
-// Dùng Omit để loại bỏ 'id' khi gửi lên server
-export type NewQuestion = Omit<Question, 'id'>;
+export type NewQuestion = Omit<Question, 'id'> & { id?: string | number };

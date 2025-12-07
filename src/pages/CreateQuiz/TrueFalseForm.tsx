@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import type { Question, NewQuestion } from './types';
 import { Image as ImageIcon, Check, X } from 'lucide-react';
+import { createQuestionApi, updateQuestionApi, getTopicsApi, type Topic } from '../../services/quizService';
 
 interface Props {
   onSave: (question: NewQuestion) => void;
@@ -11,8 +12,24 @@ interface Props {
 export default function TrueFalseForm({ onSave, initialData, onClose }: Props) {
   const [content, setContent] = useState('');
   const [correctAnswer, setCorrectAnswer] = useState<boolean | null>(null);
+  const [difficulty, setDifficulty] = useState('Dễ');
+  
+  const [topics, setTopics] = useState<Topic[]>([]);
+  const [selectedTopicId, setSelectedTopicId] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    const fetchTopics = async () => {
+      const data = await getTopicsApi();
+      setTopics(data);
+      if (initialData?.topicId) {
+        setSelectedTopicId(initialData.topicId);
+      } else if (data.length > 0) {
+        setSelectedTopicId(data[0].id);
+      }
+    };
+    fetchTopics();
+
     if (initialData?.questionType === 'TRUE_FALSE') {
       setContent(initialData.content);
       const correctOpt = initialData.options?.find(opt => opt.isCorrect);
@@ -20,11 +37,46 @@ export default function TrueFalseForm({ onSave, initialData, onClose }: Props) {
     }
   }, [initialData]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (correctAnswer === null) { alert('Vui lòng chọn đáp án Đúng hoặc Sai.'); return; }
+    if (!selectedTopicId) { alert("Vui lòng chọn Chủ đề."); return; }
+    
+    setIsLoading(true);
     const options = [ { content: 'True', isCorrect: correctAnswer === true }, { content: 'False', isCorrect: correctAnswer === false } ];
-    onSave({ content, questionType: 'TRUE_FALSE', options });
+
+    try {
+      const payload = {
+        content: content,
+        questionType: 'TRUE_FALSE',
+        difficulty: difficulty,
+        topicId: selectedTopicId,
+        options: options
+      };
+
+      let savedData;
+      // --- LOGIC PHÂN BIỆT CREATE / UPDATE ---
+      if (initialData?.id) {
+        savedData = await updateQuestionApi(initialData.id, payload);
+        alert("Cập nhật thành công!");
+      } else {
+        savedData = await createQuestionApi(payload);
+        alert("Thêm mới thành công!");
+      }
+
+      onSave({ 
+        content, 
+        questionType: 'TRUE_FALSE', 
+        id: savedData.id, 
+        topicId: selectedTopicId,
+        options 
+      });
+    } catch (error) {
+      console.error(error);
+      alert("Lỗi khi lưu câu hỏi Đ/S!");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -51,19 +103,22 @@ export default function TrueFalseForm({ onSave, initialData, onClose }: Props) {
         </div>
       </div>
 
-      <div>
-        <label htmlFor="explanation" className="block text-sm font-semibold text-gray-800 mb-2">Giải thích / Gợi ý</label>
-        <textarea id="explanation" rows={3} className="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Nhập giải thích hoặc ví dụ giúp sinh viên hiểu lý do đáp án đúng." />
-      </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label htmlFor="difficulty" className="block text-sm font-semibold text-gray-800 mb-2">Mức độ khó</label>
-          <select id="difficulty" className="w-full px-4 py-2 border border-gray-300 rounded-lg"><option>Dễ</option><option>Trung bình</option><option>Khó</option></select>
+          <select id="difficulty" value={difficulty} onChange={(e) => setDifficulty(e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg">
+            <option>Dễ</option>
+            <option>Trung bình</option>
+            <option>Khó</option>
+          </select>
         </div>
         <div>
-          <label htmlFor="subject" className="block text-sm font-semibold text-gray-800 mb-2">Chủ đề</label>
-          <input type="text" id="subject" className="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Nhập từ khóa chủ đề..."/>
+          <label className="block text-sm font-semibold text-gray-800 mb-2">Chủ đề (Topic)</label>
+          {topics.length === 0 ? <div className="text-sm text-red-500 bg-red-50 p-2 rounded">⚠️ Chưa có Topic.</div> : (
+              <select value={selectedTopicId} onChange={(e) => setSelectedTopicId(e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+                {topics.map((topic) => (<option key={topic.id} value={topic.id}>{topic.name}</option>))}
+              </select>
+          )}
         </div>
       </div>
       
@@ -71,7 +126,7 @@ export default function TrueFalseForm({ onSave, initialData, onClose }: Props) {
         <p className="text-sm text-gray-600">Loại câu hỏi: <span className="font-semibold text-blue-600 bg-blue-100 px-2 py-1 rounded">Đúng / Sai</span></p>
         <div className="flex justify-end gap-4">
           <button type="button" onClick={onClose} className="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 font-medium">Hủy</button>
-          <button type="submit" className="px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-medium">Lưu câu hỏi</button>
+          <button type="submit" disabled={isLoading} className="px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-medium">{isLoading ? 'Đang lưu...' : 'Lưu câu hỏi'}</button>
         </div>
       </div>
     </form>

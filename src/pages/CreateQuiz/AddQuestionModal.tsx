@@ -47,7 +47,6 @@ export function AddQuestionModal({ isOpen, onClose, onSave, existingQuestion }: 
   );
 
   return (
-    // SỬA LỖI Ở ĐÂY: Thêm overflow-y-auto, items-start và giảm opacity nền
     <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-start justify-center overflow-y-auto z-50 p-10" onClick={onClose}>
       <div className="bg-white rounded-xl shadow-xl w-full max-w-4xl" onClick={(e) => e.stopPropagation()}>
         <div className="p-6 border-b border-gray-200">
