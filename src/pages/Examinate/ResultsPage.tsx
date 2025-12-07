@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { ArrowDown, ArrowUp, ChevronLeft, ChevronRight, List } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { examService } from '../../services/examinateService';
 import { useQuiz } from '../../hooks/useQuiz';
-import type { QuizResultsData } from './types';
+import type { QuizResultsData } from '../../types/examinate';
 import StatCard from '../../components/Card/StatCard';
 
 interface ResultsPageProps {
@@ -10,6 +11,7 @@ interface ResultsPageProps {
 }
 
 const ResultsPage: React.FC<ResultsPageProps> = ({ quizId }) => {
+  const navigate = useNavigate();
   const { quiz, loading: quizLoading } = useQuiz(quizId);
   const [results, setResults] = useState<QuizResultsData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -34,6 +36,11 @@ const ResultsPage: React.FC<ResultsPageProps> = ({ quizId }) => {
 
     fetchResults();
   }, [quizId]);
+
+  const handleStudentClick = (studentId: string) => {
+    // Navigate to quiz result page with both quizId and studentId
+    navigate(`/quiz-result`);
+  };
 
   if (quizLoading || loading) {
     return (
@@ -102,7 +109,11 @@ const ResultsPage: React.FC<ResultsPageProps> = ({ quizId }) => {
                 <tbody>
                   {displayedStudents.length > 0 ? (
                     displayedStudents.map((result) => (
-                      <tr key={result.student.id} className="border-b border-gray-100 hover:bg-gray-50">
+                      <tr 
+                        key={result.student.id} 
+                        onClick={() => handleStudentClick(result.student.id)}
+                        className="border-b border-gray-100 hover:bg-emerald-50 cursor-pointer transition-colors active:bg-emerald-100"
+                      >
                         <td className="py-4 px-4">
                           <div className="flex items-center gap-3">
                             <img 

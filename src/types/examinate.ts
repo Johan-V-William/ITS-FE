@@ -12,16 +12,6 @@ export interface Question {
   explanation?: string;
 }
 
-export interface Quiz {
-  id: string;
-  title: string;
-  course: string;
-  totalQuestions: number;
-  duration: number;
-  createdDate: string;
-  questions: Question[];
-}
-
 export interface QuizResult {
   score: number;
   correctCount: number;
@@ -49,4 +39,36 @@ export interface QuizResultsData {
     submittedDate: string;
     status: string;
   }>;
+}
+
+export interface ApiChoice {
+  id: string;
+  content: string;
+  correct: boolean;
+}
+
+export interface ApiQuestion {
+  id: string;
+  content: string;
+  difficulty: number;
+  questionType: string;
+  createdAt: string;
+  updatedAt: string;
+  version: string | null;
+  validFrom: string | null;
+  validTo: string | null;
+  choices: ApiChoice[];
+}
+
+export interface ApiQuiz {
+  id: string;
+  courseId: string;
+  name: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  version: string | null;
+  validFrom: string | null;
+  validTo: string | null;
+  questions: ApiQuestion[];
 }

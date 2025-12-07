@@ -1,15 +1,22 @@
 import React from 'react';
 import { useQuiz } from '../../hooks/useQuiz';
-import type { QuizResult, Student } from './types';
+import type { QuizResult, Student } from '../../types/examinate';
 import ResultCard from '../../components/Card/ResultCard';
+import { demoQuizResult, demoStudent } from '@/mock-data/data';
+import HeaderPage from '@/components/HeaderPage';
+import FooterPage from '@/components/FooterPage';
 
-interface QuizResultPageProps {
-  quizId: string;
-  result: QuizResult;
-  student: Student;
-}
+// interface QuizResultPageProps {
+//   quizId: string;
+//   result: QuizResult;
+//   student: Student;
+// }
 
-const QuizResultPage: React.FC<QuizResultPageProps> = ({ quizId, result, student }) => {
+const QuizResultPage: React.FC = () => {
+  const quizId = "bbc3bc8e-b264-40c5-a080-5f487a31e2fe"; // Thay thế bằng cách lấy ID từ route hoặc props
+  const result = demoQuizResult; // Thay thế bằng cách lấy kết quả thực tế
+  const student = demoStudent; // Thay thế bằng cách lấy thông tin học viên thực tế
+
   const { quiz } = useQuiz(quizId);
 
   const submittedDate = new Date(result.timeSubmitted);
@@ -20,10 +27,11 @@ const QuizResultPage: React.FC<QuizResultPageProps> = ({ quizId, result, student
 
   return (
     <div className="min-h-screen bg-[#E9F5EE]">
+      <HeaderPage/>
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="w-full px-4 px-6 py-6 text-left">
           <div className="text-sm text-gray-500 mb-4">
-            Trang chủ › Khóa học › Toán học cơ bản › Quiz › Kết quả › {student.name}
+            Trang chủ › Khóa học › Quiz: Kiểm tra kiến thức Java cơ bản › Kết quả › {student.name}
           </div>
           
           <h1 className="text-2xl font-bold text-gray-900 mb-6">
@@ -77,7 +85,7 @@ const QuizResultPage: React.FC<QuizResultPageProps> = ({ quizId, result, student
             key={question.id}
             question={question}
             questionNumber={index + 1}
-            userAnswer={result.answers[question.id]}
+            userAnswer={result.answers[question.id as keyof typeof result.answers]}
             showExplanation={true}
           />
         ))}
@@ -166,6 +174,7 @@ const QuizResultPage: React.FC<QuizResultPageProps> = ({ quizId, result, student
           </div>
         </div>
       </div>
+      <FooterPage/>
     </div>
   );
 };

@@ -3,7 +3,7 @@ import QuizViewPage from './QuizViewPage';
 import QuizResultPage from './QuizResultPage';
 import Header from '@/components/HeaderPage';
 import Footer from '@/components/FooterPage';
-import type { QuizResult, Student } from './types';
+import type { QuizResult, Student } from '../../types/examinate';
 import {demoStudent, demoQuizResult} from '../../mock-data/data';
 
 

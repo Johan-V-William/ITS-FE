@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './hooks/useAuth';
 
 // Import các trang của bạn
-import { SignIn } from './pages/SignIn';
-import { SignUp } from './pages/SignUp';
+import { SignIn } from './pages/Authentication/SignIn';
+import { SignUp } from './pages/Authentication/SignUp';
 import Dashboard from './pages/Dashboard';
 import CreateQuiz from './pages/CreateQuiz'; // <-- Import trang của bạn
 import ExaminatePage from './pages/Examinate';
@@ -90,6 +90,15 @@ function App() {
               </ProtectedRoute>
             }
           /> 
+
+          <Route
+            path="/quiz-result/"
+            element={
+              <ProtectedRoute>
+                <QuizResultPage />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </Router>
     </AuthProvider>

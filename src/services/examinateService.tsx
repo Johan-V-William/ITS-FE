@@ -1,38 +1,8 @@
-import type { QuizOption, Question, Quiz, QuizResult, QuizResultsData } from '../pages/Examinate/types';
+import type { QuizOption, Question, Quiz, QuizResult, QuizResultsData, ApiChoice, ApiQuestion, ApiQuiz } from '../types/examinate';
 import { demoQuizResultList } from '../mock-data/data';
 import {courseService} from './courseService';
 
-interface ApiChoice {
-  id: string;
-  content: string;
-  correct: boolean;
-}
 
-interface ApiQuestion {
-  id: string;
-  content: string;
-  difficulty: number;
-  questionType: string;
-  createdAt: string;
-  updatedAt: string;
-  version: string | null;
-  validFrom: string | null;
-  validTo: string | null;
-  choices: ApiChoice[];
-}
-
-interface ApiQuiz {
-  id: string;
-  courseId: string;
-  name: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-  version: string | null;
-  validFrom: string | null;
-  validTo: string | null;
-  questions: ApiQuestion[];
-}
 
 class ExamService {
   // In-memory storage for quiz results (replaces localStorage)

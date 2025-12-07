@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 import { InputField } from '@/components/Form/InputField';
 import { SocialButton } from '@/components/Form/SocialButton';
 
