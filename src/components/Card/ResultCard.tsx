@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Question } from '../types/types';
+import type { Question } from '../../types/examinate';
 import { Check, XCircle } from 'lucide-react';
 
 interface ResultCardProps {
