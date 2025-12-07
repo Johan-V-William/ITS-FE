@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Play, HelpCircle, CheckCircle, Eye, Search, Filter, BookOpen, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import { StatCard } from '../../components/Card/StatCardCourse';
 import FooterPage from '@/components/FooterPage';
