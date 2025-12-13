@@ -1,28 +1,50 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
-interface UseTimerReturn {
-  minutes: number;
-  seconds: number;
-  timeLeft: number;
-  setIsRunning: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export const useTimer = (initialMinutes: number): UseTimerReturn => {
-  const [timeLeft, setTimeLeft] = useState<number>(initialMinutes * 60);
-  const [isRunning, setIsRunning] = useState<boolean>(true);
+export const useQuizTimer = (duration: number, onTimeUp?: () => void) => {
+  const [timeRemaining, setTimeRemaining] = useState(duration * 60);
+  const [isRunning, setIsRunning] = useState(true);
+  const intervalRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (!isRunning || timeLeft <= 0) return;
+    if (isRunning && timeRemaining > 0) {
+      intervalRef.current = window.setInterval(() => {
+        setTimeRemaining((prev) => {
+          if (prev <= 1) {
+            setIsRunning(false);
+            if (onTimeUp) onTimeUp();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
 
-    const interval = setInterval(() => {
-      setTimeLeft(t => t - 1);
-    }, 1000);
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [isRunning, timeRemaining, onTimeUp]);
 
-    return () => clearInterval(interval);
-  }, [isRunning, timeLeft]);
+  const formatTime = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
 
-  const minutes = Math.floor(timeLeft / 60);
-  const seconds = timeLeft % 60;
+  const pause = () => setIsRunning(false);
+  const resume = () => setIsRunning(true);
+  const reset = () => {
+    setTimeRemaining(duration * 60);
+    setIsRunning(true);
+  };
 
-  return { minutes, seconds, timeLeft, setIsRunning };
+  return {
+    timeRemaining,
+    formattedTime: formatTime(timeRemaining),
+    isRunning,
+    pause,
+    resume,
+    reset,
+  };
 };

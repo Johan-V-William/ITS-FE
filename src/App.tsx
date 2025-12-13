@@ -13,6 +13,7 @@ import { BackgroundPattern } from './components/BackgroundPattern';
 import './App.css';
 import QuizResultPage from './pages/Examinate/QuizResultPage';
 import { CourseManagement } from './pages/Course/CourseManagement';
+import { QuizController } from './pages/Student/QuizController';
 
 // Component này dùng để bảo vệ các route, chỉ cho phép user đã đăng nhập truy cập
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -96,6 +97,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <QuizResultPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/student/quiz/"
+            element={
+              <ProtectedRoute>
+                <QuizController />
               </ProtectedRoute>
             }
           />
